@@ -51,3 +51,11 @@
 
 @import url(./blocks/footer/footer.css);
 @import url(./blocks/footer/__copyright/footer__copyright.css);
+
+@import url(./blocks/login/__title/login__title.css);
+@import url(./blocks/login/__form/login__form.css);
+@import url(./blocks/login/__field/login__field.css);
+@import url(./blocks/login/__label/login__label.css);
+@import url(./blocks/login/__button/login__button.css);
+
+

@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
+import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 import { api } from '../utils/Api.js';
 import Header from './Header.js';
 import Main from './Main.js';
@@ -8,6 +9,12 @@ import ImagePopup from './ImagePopup.js';
 import EditProfilePopup from './EditProfilePopup.js';
 import EditAvatarPopup from './EditAvatarPopup.js';
 import AddPlacePopup from './AddPlacePopup.js';
+
+// Импортируем компоненты приложения, которые используем в Роутах
+import Register from './Register.js';
+import Login from './Login.js';
+import ProtectedRoute from './ProtectedRoute.js';
+import InfoTooltip from './InfoTooltip.js';
 
 // Импортируем объект контекста 
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
@@ -21,8 +28,12 @@ function App() {
   const [selectedCard, setSelectedCard] = useState(null);
 
   const [cards, setCards] = useState([]);
+
   // Стейт для контекста текущего пользователя
   const [currentUser, setCurrentUser] = useState({});
+
+  // Стейт статуса пользователя — вошёл он в систему или нет
+  const [loggedIn, setLoggedIn] = useState(false);
 
   // Эффект при монтровании, вызывает запрос и обновляет стейт-переменную
   // из полученного значения
@@ -37,14 +48,14 @@ function App() {
         console.log(err); // выведем ошибку в консоль
       })
 
-      api.getInitialCards()
+    api.getInitialCards()
       .then((cardsData) => {
         setCards(cardsData);
       })
 
       .catch((err) => {
         console.log(err); // выведем ошибку в консоль
-      }) 
+      })
   }, []);
 
 
@@ -87,9 +98,9 @@ function App() {
       setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
     })
 
-    .catch((err) => {
-      console.log(err); // выведем ошибку в консоль
-    }) 
+      .catch((err) => {
+        console.log(err); // выведем ошибку в консоль
+      })
   }
 
   // Для удаления карточки
@@ -98,38 +109,38 @@ function App() {
       setCards((state) => state.filter(card => card._id !== delCard._id))
     })
 
-    .catch((err) => {
-      console.log(err); // выведем ошибку в консоль
-    }) 
+      .catch((err) => {
+        console.log(err); // выведем ошибку в консоль
+      })
   }
 
   // Для формы редактирования профиля
   function handleUpdateUser(userData) {
     api.savetUserInformation(userData.name, userData.about).then(() => {
-      const updatedUserData = Object.assign({}, currentUser);  
+      const updatedUserData = Object.assign({}, currentUser);
       updatedUserData.name = userData.name;
       updatedUserData.about = userData.about;
       setCurrentUser(updatedUserData);
       closeAllPopups();
     })
 
-    .catch((err) => {
-      console.log(err); // выведем ошибку в консоль
-    }) 
+      .catch((err) => {
+        console.log(err); // выведем ошибку в консоль
+      })
   }
 
   // Для формы редактирования аватара
   function handleUpdateAvatar(userData) {
     api.changeAvatar(userData.avatar).then(() => {
-      const updatedUserData = Object.assign({}, currentUser);  
+      const updatedUserData = Object.assign({}, currentUser);
       updatedUserData.avatar = userData.avatar;
       setCurrentUser(updatedUserData);
       closeAllPopups();
     })
 
-    .catch((err) => {
-      console.log(err); // выведем ошибку в консоль
-    }) 
+      .catch((err) => {
+        console.log(err); // выведем ошибку в консоль
+      })
   }
 
   // Для формы добавления карточки
@@ -139,9 +150,9 @@ function App() {
       closeAllPopups();
     })
 
-    .catch((err) => {
-      console.log(err); // выведем ошибку в консоль
-    }) 
+      .catch((err) => {
+        console.log(err); // выведем ошибку в консоль
+      })
   }
 
   return (
@@ -152,21 +163,32 @@ function App() {
         <div className="page__container">
 
           <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} onUpdateUser={handleUpdateUser} />
-
           <AddPlacePopup isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} onAddPlace={handleAddPlaceSubmit} />
-
           <EditAvatarPopup isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} onUpdateAvatar={handleUpdateAvatar} />
-
           <PopupWithForm popupName="confirm" classText="title-confirm" title="Вы уверены?"
             name="confirm" buttonText="Да"
           />
-
           <ImagePopup card={selectedCard} onClose={closeAllPopups} />
 
           <Header />
-          <Main onEditProfile={handleEditProfileClick} onAddPlace={handleAddPlaceClick}
-            onEditAvatar={handleEditAvatarClick} onCardClick={handleCardClick} onCardLike={handleCardLike}
-            onCardDelete={handleCardDelete} cards={cards} />
+
+          <Routes>
+            {/* Защищённый маршрут */}
+          
+            <Route path="/" element={loggedIn ? <Navigate to="/main" replace /> : <Navigate to="/login" replace />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/infoTooltip" element={<InfoTooltip />} />
+            
+            <Route path="/main" element={<ProtectedRoute component={Main} onEditProfile={handleEditProfileClick} onAddPlace={handleAddPlaceClick}
+              onEditAvatar={handleEditAvatarClick} onCardClick={handleCardClick} onCardLike={handleCardLike}
+              onCardDelete={handleCardDelete} cards={cards} loggedIn={loggedIn}/>} />
+
+            {/* <Route path="/main" element={<Main />} onEditProfile={handleEditProfileClick} onAddPlace={handleAddPlaceClick}
+              onEditAvatar={handleEditAvatarClick} onCardClick={handleCardClick} onCardLike={handleCardLike}
+              onCardDelete={handleCardDelete} cards={cards} /> */}
+          </Routes>
+
           <Footer />
 
         </div></div>
