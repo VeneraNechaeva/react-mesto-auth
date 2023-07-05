@@ -1,12 +1,44 @@
-import React from 'react';
+import React, { useState, } from 'react';
+import { useNavigate } from 'react-router-dom';
+import * as auth from '../auth.js';
 import UserForm from './UserForm.js';
 
 // Компонент для регистрации
 function Register() {
 
+    // Стейт переменные, в которых содержатся значения инпутов
+    const [formValue, setFormValue] = useState({
+        email: '',
+        password: '',
+    });
+    
+// Хук возвращает функцию, которая позволяет рограммно перемещаться
+    const navigate = useNavigate();
+
+    // Обработчик изменения инпута, обновляет стейт 
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+
+        setFormValue({
+            ...formValue,
+            [name]: value
+        });
+    }
+
+    // Обработчик регистрации
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
+        auth.register(formValue.email, formValue.password)
+            .then((res) => {
+                navigate('/signin', { replace: true })
+            })
+            .catch(err => console.log(err));
+    }
+
     return (
         <UserForm name="register" title="Регистрация" buttonText="Зарегистрироваться"
-            text="Уже зарегистрированы? Войти">
+            text="Уже зарегистрированы? Войти" onSubmit={handleSubmit}>
 
             <div className="form__label">
                 <input
@@ -18,6 +50,8 @@ function Register() {
                     minLength={2}
                     maxLength={40}
                     required
+                    value={formValue.email}
+                    onChange={handleChange}
                 />
                 <span className="form__error email-error" />
             </div>
@@ -31,6 +65,8 @@ function Register() {
                     minLength={10}
                     maxLength={10}
                     required
+                    value={formValue.password}
+                    onChange={handleChange}
                 />
                 <span className="form__error password-error" />
             </div>

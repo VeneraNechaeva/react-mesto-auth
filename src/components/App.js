@@ -1,5 +1,5 @@
 import React, { useState, useEffect, Fragment } from 'react';
-import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
+import { useNavigate, Route, Routes, Navigate } from 'react-router-dom';
 import { api } from '../utils/Api.js';
 import Header from './Header.js';
 import Main from './Main.js';
@@ -9,12 +9,14 @@ import ImagePopup from './ImagePopup.js';
 import EditProfilePopup from './EditProfilePopup.js';
 import EditAvatarPopup from './EditAvatarPopup.js';
 import AddPlacePopup from './AddPlacePopup.js';
+import * as auth from '../auth.js';
 
 // Импортируем компоненты приложения, которые используем в Роутах
 import Register from './Register.js';
 import Login from './Login.js';
 import ProtectedRoute from './ProtectedRoute.js';
 import InfoTooltip from './InfoTooltip.js';
+
 
 // Импортируем объект контекста 
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
@@ -34,6 +36,33 @@ function App() {
 
   // Стейт статуса пользователя — вошёл он в систему или нет
   const [loggedIn, setLoggedIn] = useState(false);
+
+  const navigate = useNavigate();
+
+
+  //////////////////////////////////////////////////////////////////////////////////////////
+  // Эффект при монтровании, который проверяет токен
+  useEffect(() => {
+    // настало время проверить токен
+    tokenCheck();
+  }, [])
+
+
+  // Если у пользователя есть токен в localStorage, 
+  // эта функция проверит, действующий он или нет (валидность токена)
+  const tokenCheck = () => {
+    const jwt = localStorage.getItem('jwt');
+    if (jwt) {
+      // проверим токен
+      auth.getContent(jwt).then((res) => {
+        if (res) {
+          // авторизуем пользователя
+          setLoggedIn(true);
+          navigate("/users/me", { replace: true })
+        }
+      });
+    }
+  }
 
   // Эффект при монтровании, вызывает запрос и обновляет стейт-переменную
   // из полученного значения
@@ -60,6 +89,15 @@ function App() {
 
 
   // Обработчики событий: изменяют внутреннее состояние
+
+  // Метод, который поменяет статус пользователя
+  function handleLogin (e) {
+    e.preventDefault();
+    setLoggedIn({
+      loggedIn: true
+    })
+  }
+
   // Для попапа редактирования профиля
   function handleEditProfileClick() {
     setIsEditProfilePopupOpen(true);
@@ -174,14 +212,14 @@ function App() {
 
           <Routes>
 
-            <Route path="/" element={loggedIn ? <Navigate to="/main" replace /> : <Navigate to="/login" replace />} />
-            
-            <Route path="/register" element={<Register />} />
-            <Route path="/login" element={<Login />} />
+            <Route path="/" element={loggedIn ? <Navigate to="/main" replace /> : <Navigate to="/signin" replace />} />
+
+            <Route path="/signup" element={<Register />} />
+            <Route path="/signin" element={<Login handleLogin={handleLogin} />} />
             <Route path="/infoTooltip" element={<InfoTooltip />} />
 
             {/* Защищённый маршрут */}
-            <Route path="/main" element={<ProtectedRoute component={Main} onEditProfile={handleEditProfileClick} onAddPlace={handleAddPlaceClick}
+            <Route path="/main" element={<ProtectedRoute element={Main} onEditProfile={handleEditProfileClick} onAddPlace={handleAddPlaceClick}
               onEditAvatar={handleEditAvatarClick} onCardClick={handleCardClick} onCardLike={handleCardLike}
               onCardDelete={handleCardDelete} cards={cards} loggedIn={loggedIn} />} />
 

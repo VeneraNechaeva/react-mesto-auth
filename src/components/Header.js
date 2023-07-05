@@ -9,6 +9,8 @@ function Header() {
                 src={headerLogo}
                 alt="сервис Mesto"
             />
+            <p className="header__email">venera_nechaeva@mail.ru</p>
+            <a className="header__link">Выйти</a>
         </header>
     )
 }

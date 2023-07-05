@@ -1,24 +1,50 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import * as auth from '../auth.js';
 import UserForm from './UserForm.js';
 
 // Компонент для входа
-function Login() {
+function Login({ handleLogin}) {
 
     // Стейт переменные, в которых содержатся значения инпутов
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const [formValue, setFormValue] = useState({
+        email: '',
+        password: '',
+    });
 
-    // Обработчики изменения инпута, обновляет стейт 
-    function handleChangeEmail(e) {
-        setName(e.target.value);
+    // Хук возвращает функцию, которая позволяет рограммно перемещаться
+    const navigate = useNavigate();
+
+    // Обработчик изменения инпута, обновляет стейт 
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+
+        setFormValue({
+            ...formValue,
+            [name]: value
+        });
     }
 
-    function handleChangPassword(e) {
-        setDescription(e.target.value);
+    // Обработчик авторизации
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
+        if (!formValue.email || !formValue.password) {
+            return;
+        }
+        auth.login(formValue.email, formValue.password)
+            .then((jwt) => {
+                if (jwt) {
+                    setFormValue({ username: '', password: '' });
+                    handleLogin(e);
+                    navigate('/main', { replace: true });
+                }
+            })
+            .catch(err => console.log(err));
     }
 
     return (
-        <UserForm name="login" title="Вход" buttonText="Войти" text="">
+        <UserForm name="login" title="Вход" buttonText="Войти" text="" onSubmit={handleSubmit}>
             <div className="form__label">
                 <input
                     id="email"
@@ -29,7 +55,8 @@ function Login() {
                     minLength={2}
                     maxLength={40}
                     required
-                    onChange={handleChangeEmail}
+                    value={formValue.email}
+                    onChange={handleChange}
                 />
                 <span className="form__error email-error" />
             </div>
@@ -43,7 +70,8 @@ function Login() {
                     minLength={10}
                     maxLength={10}
                     required
-                    onChange={handleChangPassword}
+                    value={formValue.password}
+                    onChange={handleChange}
                 />
                 <span className="form__error password-error" />
             </div>
