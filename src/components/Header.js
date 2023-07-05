@@ -9,8 +9,10 @@ function Header() {
                 src={headerLogo}
                 alt="сервис Mesto"
             />
-            <p className="header__email">venera_nechaeva@mail.ru</p>
-            <a className="header__link">Выйти</a>
+            <div className="header__tex-conteiner">
+                <p className="header__email">email@mail.com</p>
+                <a className="header__link">Выйти</a>
+            </div>
         </header>
     )
 }

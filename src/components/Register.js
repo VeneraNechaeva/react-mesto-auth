@@ -38,7 +38,7 @@ function Register() {
 
     return (
         <UserForm name="register" title="Регистрация" buttonText="Зарегистрироваться"
-            text="Уже зарегистрированы? Войти" onSubmit={handleSubmit}>
+            text="Уже зарегистрированы?" textLink="Войти" onSubmit={handleSubmit}>
 
             <div className="form__label">
                 <input

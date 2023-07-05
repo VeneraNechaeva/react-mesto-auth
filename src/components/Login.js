@@ -4,7 +4,7 @@ import * as auth from '../auth.js';
 import UserForm from './UserForm.js';
 
 // Компонент для входа
-function Login({ handleLogin}) {
+function Login({ handleLogin }) {
 
     // Стейт переменные, в которых содержатся значения инпутов
     const [formValue, setFormValue] = useState({
@@ -44,7 +44,8 @@ function Login({ handleLogin}) {
     }
 
     return (
-        <UserForm name="login" title="Вход" buttonText="Войти" text="" onSubmit={handleSubmit}>
+        <UserForm name="login" title="Вход" buttonText="Войти" text="" textLink=""
+            onSubmit={handleSubmit}>
             <div className="form__label">
                 <input
                     id="email"
