@@ -173,20 +173,18 @@ function App() {
           <Header />
 
           <Routes>
-            {/* Защищённый маршрут */}
-          
+
             <Route path="/" element={loggedIn ? <Navigate to="/main" replace /> : <Navigate to="/login" replace />} />
+            
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
             <Route path="/infoTooltip" element={<InfoTooltip />} />
-            
+
+            {/* Защищённый маршрут */}
             <Route path="/main" element={<ProtectedRoute component={Main} onEditProfile={handleEditProfileClick} onAddPlace={handleAddPlaceClick}
               onEditAvatar={handleEditAvatarClick} onCardClick={handleCardClick} onCardLike={handleCardLike}
-              onCardDelete={handleCardDelete} cards={cards} loggedIn={loggedIn}/>} />
+              onCardDelete={handleCardDelete} cards={cards} loggedIn={loggedIn} />} />
 
-            {/* <Route path="/main" element={<Main />} onEditProfile={handleEditProfileClick} onAddPlace={handleAddPlaceClick}
-              onEditAvatar={handleEditAvatarClick} onCardClick={handleCardClick} onCardLike={handleCardLike}
-              onCardDelete={handleCardDelete} cards={cards} /> */}
           </Routes>
 
           <Footer />

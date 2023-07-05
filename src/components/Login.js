@@ -1,14 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
+import UserForm from './UserForm.js';
 
+// Компонент для входа
 function Login() {
-    return (
 
-        <form className="login__form" name="login" noValidate="">
-            <h2 className="login__title">Вход</h2>
-            <div className="login__label">
+    // Стейт переменные, в которых содержатся значения инпутов
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+
+
+    
+    return (
+        <UserForm name="login" title="Вход" buttonText="Войти" text="">
+            <div className="form__label">
                 <input
                     id="email"
-                    className="login__field login__field_text_email"
+                    className="form__field form__field_text_email"
                     type="email"
                     name="email"
                     placeholder="Email"
@@ -16,12 +23,12 @@ function Login() {
                     maxLength={40}
                     required=""
                 />
-                <span className="login__error email-error" />
+                <span className="form__error email-error" />
             </div>
-            <div className="login__label">
+            <div className="form__label">
                 <input
                     id="password"
-                    className="login__field login__field_text_password"
+                    className="form__field form__field_text_password"
                     type="password"
                     name="password"
                     placeholder="Пароль"
@@ -29,12 +36,9 @@ function Login() {
                     maxLength={10}
                     required=""
                 />
-                <span className="login__error password-error" />
+                <span className="form__error password-error" />
             </div>
-            <button className="login__button" type="submit">
-                Войти
-            </button>
-        </form>
+        </UserForm>
     )
 }
 
