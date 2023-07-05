@@ -1,0 +1,7 @@
+.register__label {
+    margin-bottom: 30px;
+}
+
+.register__label:last-of-type {
+    margin-bottom: 216px;
+}

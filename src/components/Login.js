@@ -1,11 +1,8 @@
 import React from 'react';
-import headerLogo from '../images/Vector.svg';
 
 function Login() {
     return (
-        // <div className="login">
-        //     <div className="login__container">
-        //         <h2 className="login__title">Вход</h2>
+
         <form className="login__form" name="login" noValidate="">
             <h2 className="login__title">Вход</h2>
             <div className="login__label">
@@ -38,8 +35,6 @@ function Login() {
                 Войти
             </button>
         </form>
-        //     </div>
-        // </div>
     )
 }
 
