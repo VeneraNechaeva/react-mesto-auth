@@ -17,7 +17,7 @@ function Register() {
                     placeholder="Email"
                     minLength={2}
                     maxLength={40}
-                    required=""
+                    required
                 />
                 <span className="form__error email-error" />
             </div>
@@ -30,7 +30,7 @@ function Register() {
                     placeholder="Пароль"
                     minLength={10}
                     maxLength={10}
-                    required=""
+                    required
                 />
                 <span className="form__error password-error" />
             </div>

@@ -8,8 +8,15 @@ function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
+    // Обработчики изменения инпута, обновляет стейт 
+    function handleChangeEmail(e) {
+        setName(e.target.value);
+    }
 
-    
+    function handleChangPassword(e) {
+        setDescription(e.target.value);
+    }
+
     return (
         <UserForm name="login" title="Вход" buttonText="Войти" text="">
             <div className="form__label">
@@ -21,7 +28,8 @@ function Login() {
                     placeholder="Email"
                     minLength={2}
                     maxLength={40}
-                    required=""
+                    required
+                    onChange={handleChangeEmail}
                 />
                 <span className="form__error email-error" />
             </div>
@@ -34,7 +42,8 @@ function Login() {
                     placeholder="Пароль"
                     minLength={10}
                     maxLength={10}
-                    required=""
+                    required
+                    onChange={handleChangPassword}
                 />
                 <span className="form__error password-error" />
             </div>
