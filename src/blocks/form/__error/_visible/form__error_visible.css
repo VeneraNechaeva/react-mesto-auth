@@ -1,4 +1,4 @@
-.register__error_visible {
+.form__error_visible {
     display: block;
     color: rgba(255, 0, 0, 1);
     font-weight: 400;

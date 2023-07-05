@@ -1,16 +1,17 @@
 import React from 'react';
+import UserForm from './UserForm.js';
 
+// Компонент для регистрации
 function Register() {
 
-
-    
     return (
-        <form className="register__form" name="register" noValidate="">
-            <h2 className="register__title">Регистрация</h2>
-            <div className="register__label">
+        <UserForm name="register" title="Регистрация" buttonText="Зарегистрироваться"
+            text="Уже зарегистрированы? Войти">
+
+            <div className="form__label">
                 <input
                     id="email"
-                    className="register__field register__field_text_email"
+                    className="form__field form__field_text_email"
                     type="email"
                     name="email"
                     placeholder="Email"
@@ -18,12 +19,12 @@ function Register() {
                     maxLength={40}
                     required=""
                 />
-                <span className="register__error email-error" />
+                <span className="form__error email-error" />
             </div>
-            <div className="register__label">
+            <div className="form__label">
                 <input
                     id="password"
-                    className="register__field login__field_text_password"
+                    className="form__field form__field_text_password"
                     type="password"
                     name="password"
                     placeholder="Пароль"
@@ -31,13 +32,9 @@ function Register() {
                     maxLength={10}
                     required=""
                 />
-                <span className="register__error password-error" />
+                <span className="form__error password-error" />
             </div>
-            <button className="register__button" type="submit">
-                Зарегистрироваться
-            </button>
-            <p className="register__text">Уже зарегистрированы? Войти</p>
-        </form>
+        </UserForm>
     )
 }
 

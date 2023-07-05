@@ -1,4 +1,4 @@
-.register__button {
+.form__button {
     height: 50px;
     border: 0;
     cursor: pointer;
@@ -9,7 +9,7 @@
 
 }
 
-.register__button:hover {
+.form__button:hover {
     transition: linear;
     transition-duration: 0.4s;
     opacity: 0.85;
