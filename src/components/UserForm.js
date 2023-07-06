@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 // Общий компонент для формы входа и регистрации
 
 function UserForm({ name, title, buttonText, children, text, textLink, onSubmit }) {
@@ -9,7 +11,7 @@ function UserForm({ name, title, buttonText, children, text, textLink, onSubmit 
                 {buttonText}
             </button>
             <p className="form__text">{text}
-            <a className="form__link-text">{textLink}</a>
+                <Link className="form__link-text" to="/signin" >{textLink}</Link>
             </p>
         </form>
     )

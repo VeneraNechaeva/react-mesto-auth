@@ -30,7 +30,15 @@ function App() {
   const [selectedCard, setSelectedCard] = useState(null);
 
   const [cards, setCards] = useState([]);
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// Стейты для модальных окон регистрации (информационная подсказка)
+// Для успешной регистрации
+const [isSuccessfulRegistrPopupOpen, setIsSuccessfulRegistrPopupOpen] = useState(false);
+// Для неуспешной регистрации
+const [isUnsuccessfulRegistrPopupOpen, setIsUnsuccessfulRegistrPopupOpen] = useState(false);
 
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
   // Стейт для контекста текущего пользователя
   const [currentUser, setCurrentUser] = useState({});
 
@@ -91,7 +99,7 @@ function App() {
   // Обработчики событий: изменяют внутреннее состояние
 
   // Метод, который поменяет статус пользователя
-  function handleLogin (e) {
+  function handleLogin(e) {
     e.preventDefault();
     setLoggedIn({
       loggedIn: true
@@ -212,14 +220,14 @@ function App() {
 
           <Routes>
 
-            <Route path="/" element={loggedIn ? <Navigate to="/main" replace /> : <Navigate to="/signin" replace />} />
+            <Route path="/" element={loggedIn ? <Navigate to="/users/me" replace /> : <Navigate to="/signin" replace />} />
 
             <Route path="/signup" element={<Register />} />
             <Route path="/signin" element={<Login handleLogin={handleLogin} />} />
             <Route path="/infoTooltip" element={<InfoTooltip />} />
 
             {/* Защищённый маршрут */}
-            <Route path="/main" element={<ProtectedRoute element={Main} onEditProfile={handleEditProfileClick} onAddPlace={handleAddPlaceClick}
+            <Route path="/users/me" element={<ProtectedRoute element={Main} onEditProfile={handleEditProfileClick} onAddPlace={handleAddPlaceClick}
               onEditAvatar={handleEditAvatarClick} onCardClick={handleCardClick} onCardLike={handleCardLike}
               onCardDelete={handleCardDelete} cards={cards} loggedIn={loggedIn} />} />
 

@@ -26,7 +26,7 @@ function Register() {
     }
 
     // Обработчик регистрации
-    const handleSubmit = (e) => {
+    const onRegister = (e) => {
         e.preventDefault();
 
         auth.register(formValue.email, formValue.password)
@@ -38,7 +38,7 @@ function Register() {
 
     return (
         <UserForm name="register" title="Регистрация" buttonText="Зарегистрироваться"
-            text="Уже зарегистрированы?" textLink="Войти" onSubmit={handleSubmit}>
+            text="Уже зарегистрированы?" textLink="Войти" onSubmit={onRegister} >
 
             <div className="form__label">
                 <input

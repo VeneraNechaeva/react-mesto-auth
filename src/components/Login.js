@@ -26,7 +26,7 @@ function Login({ handleLogin }) {
     }
 
     // Обработчик авторизации
-    const handleSubmit = (e) => {
+    const onLogin = (e) => {
         e.preventDefault();
 
         if (!formValue.email || !formValue.password) {
@@ -37,7 +37,7 @@ function Login({ handleLogin }) {
                 if (jwt) {
                     setFormValue({ username: '', password: '' });
                     handleLogin(e);
-                    navigate('/main', { replace: true });
+                    navigate('/users/me', { replace: true });
                 }
             })
             .catch(err => console.log(err));
@@ -45,7 +45,7 @@ function Login({ handleLogin }) {
 
     return (
         <UserForm name="login" title="Вход" buttonText="Войти" text="" textLink=""
-            onSubmit={handleSubmit}>
+            onSubmit={onLogin}>
             <div className="form__label">
                 <input
                     id="email"
