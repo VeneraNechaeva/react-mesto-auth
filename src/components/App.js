@@ -30,15 +30,19 @@ function App() {
   const [selectedCard, setSelectedCard] = useState(null);
 
   const [cards, setCards] = useState([]);
-////////////////////////////////////////////////////////////////////////////////////////////////////
-// Стейты для модальных окон регистрации (информационная подсказка)
-// Для успешной регистрации
-const [isSuccessfulRegistrPopupOpen, setIsSuccessfulRegistrPopupOpen] = useState(false);
-// Для неуспешной регистрации
-const [isUnsuccessfulRegistrPopupOpen, setIsUnsuccessfulRegistrPopupOpen] = useState(false);
+  ////////////////////////////////////////////////////////////////////////////////////////////////////
+  // Стейты для модальных окон регистрации (информационная подсказка)
+  // Для успешной регистрации
+  const [isSuccessRegistrPopupOpen, setIsSuccessRegistrPopupOpen] = useState(false);
+  // Для неуспешной регистрации
+  const [isFailLoginPopupOpen, setIsFailLoginPopupOpen] = useState(false);
 
+  // Обратчик для открытия попапа успешной регистрации
+  function handleSuccessRegistr() {
+    setIsSuccessRegistrPopupOpen(() => true);
+  }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////////////////////////////////////////////
   // Стейт для контекста текущего пользователя
   const [currentUser, setCurrentUser] = useState({});
 
@@ -48,7 +52,7 @@ const [isUnsuccessfulRegistrPopupOpen, setIsUnsuccessfulRegistrPopupOpen] = useS
   const navigate = useNavigate();
 
 
-  //////////////////////////////////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////
   // Эффект при монтровании, который проверяет токен
   useEffect(() => {
     // настало время проверить токен
@@ -132,6 +136,7 @@ const [isUnsuccessfulRegistrPopupOpen, setIsUnsuccessfulRegistrPopupOpen] = useS
     setIsAddPlacePopupOpen(false);
     setIsEditAvatarPopupOpen(false);
     setSelectedCard(null);
+    setIsSuccessRegistrPopupOpen(false);
   }
 
   // Для лайка карточки
@@ -216,13 +221,18 @@ const [isUnsuccessfulRegistrPopupOpen, setIsUnsuccessfulRegistrPopupOpen] = useS
           />
           <ImagePopup card={selectedCard} onClose={closeAllPopups} />
 
+          <InfoTooltip isOpen={isSuccessRegistrPopupOpen} popupName="tooltip" classText="title-tooltip" title="Вы успешно зарегистрировались!"
+            onClose={closeAllPopups} />
+          {/* <InfoTooltip popupName="tooltip" classText="title-tooltip" title="Что-то пошло не так! Попробуйте ещё раз."
+            onClose={closeAllPopups} /> */}
+
           <Header />
 
           <Routes>
 
             <Route path="/" element={loggedIn ? <Navigate to="/users/me" replace /> : <Navigate to="/signin" replace />} />
 
-            <Route path="/signup" element={<Register />} />
+            <Route path="/signup" element={<Register onSuccessRegister={handleSuccessRegistr} />} />
             <Route path="/signin" element={<Login handleLogin={handleLogin} />} />
             <Route path="/infoTooltip" element={<InfoTooltip />} />
 

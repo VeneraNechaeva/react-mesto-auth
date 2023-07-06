@@ -4,7 +4,7 @@ import * as auth from '../auth.js';
 import UserForm from './UserForm.js';
 
 // Компонент для регистрации
-function Register() {
+function Register({onSuccessRegister}) {
 
     // Стейт переменные, в которых содержатся значения инпутов
     const [formValue, setFormValue] = useState({
@@ -31,14 +31,17 @@ function Register() {
 
         auth.register(formValue.email, formValue.password)
             .then((res) => {
-                navigate('/signin', { replace: true })
+                if (res?.data) {
+                    onSuccessRegister();
+                    navigate('/signin', { replace: true })      
+                }
             })
             .catch(err => console.log(err));
     }
 
     return (
         <UserForm name="register" title="Регистрация" buttonText="Зарегистрироваться"
-            text="Уже зарегистрированы?" textLink="Войти" onSubmit={onRegister} >
+            text="Уже зарегистрированы?" textLink="Войти" onSubmit={onRegister}>
 
             <div className="form__label">
                 <input

@@ -12,12 +12,21 @@ export const register = (email, password) => {
         body: JSON.stringify({ email, password })
     })
         .then((response) => {
-            return response.json();
+            try {
+                if (response.status === 201) {
+                    return response.json();
+                } 
+            } catch (e) {
+                console.log(e);
+                return (e);
+            }
         })
         .then((res) => {
             return res;
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+            console.log(err);
+        });
 };
 
 // Функция, которая проверяет логин и пароль пользователя на 
@@ -31,7 +40,16 @@ export const login = (email, password) => {
         body: JSON.stringify({ email, password })
     })
 
-        .then((response => response.json()))
+        .then((response) => {
+            try {
+                if (response.status === 200) {
+                    return response.json();
+                }
+            } catch (e) {
+                console.log(e);
+                return (e)
+            }
+        })
 
         .then((data) => {
             if (data.token) {
@@ -52,7 +70,16 @@ export const getContent = (token) => {
             'Authorization': `Bearer ${token}`
         },
     })
-        .then(res => res.json())
+        .then(response => {
+            try {
+                if (response.status === 200) {
+                    return response.json();
+                }
+            } catch (e) {
+                console.log(e);
+                return (e)
+            }
+        })
         .then(data => data)
 
         .catch((err) => console.log(err));
