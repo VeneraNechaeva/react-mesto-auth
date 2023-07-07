@@ -4,7 +4,7 @@ import * as auth from '../auth.js';
 import UserForm from './UserForm.js';
 
 // Компонент для входа
-function Login({ handleLogin }) {
+function Login({ handleLogin, handleFailLogin }) {
 
     // Стейт переменные, в которых содержатся значения инпутов
     const [formValue, setFormValue] = useState({
@@ -38,6 +38,8 @@ function Login({ handleLogin }) {
                     setFormValue({ username: '', password: '' });
                     handleLogin(e);
                     navigate('/users/me', { replace: true });
+                } else {
+                    handleFailLogin(); //////////////////////////////////////////////////////////////
                 }
             })
             .catch(err => console.log(err));

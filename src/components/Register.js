@@ -1,5 +1,4 @@
 import React, { useState, } from 'react';
-import { useNavigate } from 'react-router-dom';
 import * as auth from '../auth.js';
 import UserForm from './UserForm.js';
 
@@ -11,9 +10,6 @@ function Register({onSuccessRegister}) {
         email: '',
         password: '',
     });
-    
-// Хук возвращает функцию, которая позволяет рограммно перемещаться
-    const navigate = useNavigate();
 
     // Обработчик изменения инпута, обновляет стейт 
     const handleChange = (e) => {
