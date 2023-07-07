@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Route, Routes, Navigate } from 'react-router-dom';
 import { api } from '../utils/Api.js';
 import Header from './Header.js';
@@ -30,37 +30,27 @@ function App() {
   const [selectedCard, setSelectedCard] = useState(null);
 
   const [cards, setCards] = useState([]);
-  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
   // Стейты для модальных окон регистрации (информационная подсказка)
   // Для успешной регистрации
   const [isSuccessRegistrPopupOpen, setIsSuccessRegistrPopupOpen] = useState(false);
   // Для неуспешной регистрации
   const [isFailLoginPopupOpen, setIsFailLoginPopupOpen] = useState(false);
 
-  // Обратчик для открытия попапа "успешной регистрации"
-  function handleSuccessRegistr() {
-    setIsSuccessRegistrPopupOpen(() => true);
-  }
-
-  // Обратчик для открытия попапа "неудачного входа"
-  function handleFailLogin() {
-    setIsFailLoginPopupOpen(() => true);
-  }
-
-  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // Стейт для контекста текущего пользователя
   const [currentUser, setCurrentUser] = useState({});
 
   // Стейт статуса пользователя — вошёл он в систему или нет
   const [loggedIn, setLoggedIn] = useState(false);
 
+  // Стейт информации от пользователя
+  const [userInfo, setUserInfo] = useState({});
+
   // Хук возвращает функцию, которая позволяет рограммно перемещаться
   const navigate = useNavigate();
 
-  //////////////////////////////////////////////////
   // Эффект при монтровании, который проверяет токен
   useEffect(() => {
-    // настало время проверить токен
     tokenCheck();
   }, [])
 
@@ -74,10 +64,10 @@ function App() {
       auth.getContent(jwt).then((res) => {
         if (res) {
           // авторизуем пользователя
+          setUserInfo(() => res.data);
           setLoggedIn(true);
           navigate("/users/me", { replace: true })
         }
-        // else { handleFailLogin() } /////////////////////////////////////
       });
     }
   }
@@ -111,9 +101,20 @@ function App() {
   // Метод, который поменяет статус пользователя
   function handleLogin(e) {
     e.preventDefault();
+    tokenCheck();
     setLoggedIn({
       loggedIn: true
     })
+  }
+
+  // Обратчик для открытия попапа "успешной регистрации"
+  function handleSuccessRegistr() {
+    setIsSuccessRegistrPopupOpen(() => true);
+  }
+
+  // Обратчик для открытия попапа "неудачного входа"
+  function handleFailLogin() {
+    setIsFailLoginPopupOpen(() => true);
   }
 
   // Для попапа редактирования профиля
@@ -233,12 +234,13 @@ function App() {
           />
           <ImagePopup card={selectedCard} onClose={closeAllPopups} />
 
+
           <InfoTooltip isOpen={isSuccessRegistrPopupOpen} popupName="success" classIcon="success-icon" classText="title-success" title="Вы успешно зарегистрировались!"
             onClose={closeSuccessRegistr} />
           <InfoTooltip isOpen={isFailLoginPopupOpen} popupName="fail" classIcon="fail-icon" classText="title-fail" title="Что-то пошло не так! Попробуйте ещё раз."
             onClose={closeAllPopups} />
 
-          <Header />
+          <Header userInfo={userInfo} />
 
           <Routes>
 
@@ -246,7 +248,6 @@ function App() {
 
             <Route path="/signup" element={<Register onSuccessRegister={handleSuccessRegistr} />} />
             <Route path="/signin" element={<Login handleLogin={handleLogin} handleFailLogin={handleFailLogin} />} />
-            <Route path="/infoTooltip" element={<InfoTooltip />} />
 
             {/* Защищённый маршрут */}
             <Route path="/users/me" element={<ProtectedRoute element={Main} onEditProfile={handleEditProfileClick} onAddPlace={handleAddPlaceClick}

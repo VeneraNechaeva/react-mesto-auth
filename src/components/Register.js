@@ -3,7 +3,7 @@ import * as auth from '../auth.js';
 import UserForm from './UserForm.js';
 
 // Компонент для регистрации
-function Register({onSuccessRegister}) {
+function Register({ onSuccessRegister }) {
 
     // Стейт переменные, в которых содержатся значения инпутов
     const [formValue, setFormValue] = useState({
@@ -29,7 +29,6 @@ function Register({onSuccessRegister}) {
             .then((res) => {
                 if (res?.data) {
                     onSuccessRegister();
-                    // navigate('/signin', { replace: true })      
                 }
             })
             .catch(err => console.log(err));
