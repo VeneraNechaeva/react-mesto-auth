@@ -35,11 +35,12 @@ function Login({ handleLogin, handleFailLogin }) {
         auth.login(formValue.email, formValue.password)
             .then((jwt) => {
                 if (jwt) {
+                    localStorage.setItem('jwt', jwt);
                     setFormValue({ username: '', password: '' });
                     handleLogin(e);
                     navigate('/users/me', { replace: true });
                 } else {
-                    handleFailLogin(); //////////////////////////////////////////////////////////////
+                    handleFailLogin();
                 }
             })
             .catch(err => console.log(err));

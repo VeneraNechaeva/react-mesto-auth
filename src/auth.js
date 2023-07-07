@@ -15,7 +15,7 @@ export const register = (email, password) => {
             try {
                 if (response.status === 201) {
                     return response.json();
-                } 
+                }
             } catch (e) {
                 console.log(e);
                 return (e);
@@ -53,7 +53,6 @@ export const login = (email, password) => {
 
         .then((data) => {
             if (data.token) {
-                localStorage.setItem('jwt', data.token);
                 return data.token;
             }
         })
