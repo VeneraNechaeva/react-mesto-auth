@@ -33,7 +33,7 @@ function Register({onSuccessRegister}) {
             .then((res) => {
                 if (res?.data) {
                     onSuccessRegister();
-                    navigate('/signin', { replace: true })      
+                    // navigate('/signin', { replace: true })      
                 }
             })
             .catch(err => console.log(err));

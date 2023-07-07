@@ -136,7 +136,12 @@ function App() {
     setIsAddPlacePopupOpen(false);
     setIsEditAvatarPopupOpen(false);
     setSelectedCard(null);
+  }
+
+  // Закрытие попапа SuccessRegistr
+  function closeSuccessRegistr() {
     setIsSuccessRegistrPopupOpen(false);
+    navigate('/signin', { replace: true })
   }
 
   // Для лайка карточки
@@ -221,8 +226,8 @@ function App() {
           />
           <ImagePopup card={selectedCard} onClose={closeAllPopups} />
 
-          <InfoTooltip isOpen={isSuccessRegistrPopupOpen} popupName="tooltip" classText="title-tooltip" title="Вы успешно зарегистрировались!"
-            onClose={closeAllPopups} />
+          <InfoTooltip isOpen={isSuccessRegistrPopupOpen} popupName="success" classText="title-tooltip" title="Вы успешно зарегистрировались!"
+            onClose={closeSuccessRegistr} />
           {/* <InfoTooltip popupName="tooltip" classText="title-tooltip" title="Что-то пошло не так! Попробуйте ещё раз."
             onClose={closeAllPopups} /> */}
 

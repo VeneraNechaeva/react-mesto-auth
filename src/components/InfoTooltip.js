@@ -5,6 +5,7 @@ function InfoTooltip({popupName, isOpen, onClose, classText, title}) {
         <div className={`popup popup_${popupName} ${isOpen ? "popup_opened" : ""}`}>
             <div className="popup__container">
                 <button className="popup__close-icon" type="button" onClick={onClose} />
+                <div className="popup__success-icon" />
                 <h2 className={`popup__${classText}`}>{title}</h2>
             </div>
         </div>
