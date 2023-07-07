@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Route, Routes, Navigate } from 'react-router-dom';
 import { api } from '../utils/Api.js';
 import Header from './Header.js';
@@ -239,7 +239,7 @@ function App() {
             onClose={closeAllPopups} />
 
           <Header />
-
+          
           <Routes>
 
             <Route path="/" element={loggedIn ? <Navigate to="/users/me" replace /> : <Navigate to="/signin" replace />} />
