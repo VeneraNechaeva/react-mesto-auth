@@ -3,7 +3,7 @@ import * as auth from '../auth.js';
 import UserForm from './UserForm.js';
 
 // Компонент для регистрации
-function Register({ onSuccessRegister }) {
+function Register({ onSuccessRegister, onFailRegister }) {
 
     // Стейт переменные, в которых содержатся значения инпутов
     const [formValue, setFormValue] = useState({
@@ -27,11 +27,19 @@ function Register({ onSuccessRegister }) {
 
         auth.register(formValue.email, formValue.password)
             .then((res) => {
-                if (res?.data) {
+                try {
                     onSuccessRegister();
+                } catch (err) {
+                    onFailRegister({body: {error: err}})
                 }
             })
-            .catch(err => console.log(err));
+            .catch(err => {
+                err.then(errMsg => {
+                    onFailRegister(errMsg)
+                    console.log(errMsg)
+                }
+                )
+            });
     }
 
     return (

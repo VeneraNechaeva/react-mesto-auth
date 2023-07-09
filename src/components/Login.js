@@ -34,16 +34,22 @@ function Login({ handleLogin, handleFailLogin }) {
         }
         auth.login(formValue.email, formValue.password)
             .then((jwt) => {
-                if (jwt) {
+                try {
                     localStorage.setItem('jwt', jwt);
                     setFormValue({ username: '', password: '' });
                     handleLogin(e);
                     navigate('/users/me', { replace: true });
-                } else {
-                    handleFailLogin();
+                } catch (err) {
+                    handleFailLogin({body: {message: err}})
                 }
             })
-            .catch(err => console.log(err));
+            .catch(err => {
+                err.then(errMsg => {
+                    handleFailLogin(errMsg)
+                    console.log(errMsg)
+                }
+                )
+            });
     }
 
     return (
