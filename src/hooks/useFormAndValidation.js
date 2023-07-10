@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react';
 
+// Хук для контроля любого количества инпутов в любых формах
 export function useFormAndValidation() {
     // Стейт переменные
     // Cодержатся значения инпутов
@@ -17,7 +18,7 @@ export function useFormAndValidation() {
         setIsValid(e.target.closest('form').checkValidity());
     };
 
-
+    // Очистка полей от ошибок
     const resetForm = useCallback((newValues = {}, newErrors = {}, newIsValid = false) => {
         setValues(newValues);
         setErrors(newErrors);

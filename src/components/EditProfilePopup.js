@@ -8,6 +8,7 @@ function EditProfilePopup({ onUpdateUser, isOpen, onClose }) {
     // Подписка на контекст
     const currentUser = React.useContext(CurrentUserContext);
 
+    // Запуск валидации
     const { values, handleChange, errors, isValid, setValues, resetForm } = useFormAndValidation()
 
     function handleSubmit(e) {
