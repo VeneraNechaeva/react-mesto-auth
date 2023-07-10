@@ -1,5 +1,6 @@
 .form__label {
     margin-bottom: 30px;
+    position: relative;
 }
 
 .form__label:last-of-type {

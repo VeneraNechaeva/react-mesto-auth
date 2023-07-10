@@ -1,42 +1,43 @@
-import React, { useState, } from 'react';
+import React, { useEffect, } from 'react';
 import * as auth from '../auth.js';
 import UserForm from './UserForm.js';
+import { useFormAndValidation } from '../hooks/useFormAndValidation.js';
 
 // Компонент для регистрации
-function Register({ onSuccessRegister }) {
+function Register({ onSuccessRegister, onFailRegister }) {
 
-    // Стейт переменные, в которых содержатся значения инпутов
-    const [formValue, setFormValue] = useState({
-        email: '',
-        password: '',
-    });
+    // Запуск валидации
+    const { values, handleChange, errors, isValid, resetForm } = useFormAndValidation();
 
-    // Обработчик изменения инпута, обновляет стейт 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-
-        setFormValue({
-            ...formValue,
-            [name]: value
-        });
-    }
+    // Очистка полей от ошибок
+    useEffect(() => {
+        resetForm();
+    }, []);
 
     // Обработчик регистрации
     const onRegister = (e) => {
         e.preventDefault();
 
-        auth.register(formValue.email, formValue.password)
+        auth.register(values.email, values.password)
             .then((res) => {
-                if (res?.data) {
+                try {
                     onSuccessRegister();
+                } catch (err) {
+                    onFailRegister({ body: { error: err } })
                 }
             })
-            .catch(err => console.log(err));
+            .catch(err => {
+                err.then(errMsg => {
+                    onFailRegister(errMsg)
+                    console.log(errMsg)
+                }
+                )
+            });
     }
 
     return (
         <UserForm name="register" title="Регистрация" buttonText="Зарегистрироваться"
-            text="Уже зарегистрированы?" textLink="Войти" onSubmit={onRegister}>
+            text="Уже зарегистрированы?" textLink="Войти" onSubmit={onRegister} isSubmitEnable={isValid}>
 
             <div className="form__label">
                 <input
@@ -48,10 +49,11 @@ function Register({ onSuccessRegister }) {
                     minLength={2}
                     maxLength={40}
                     required
-                    value={formValue.email}
+                    value={values.email ?? ''}
                     onChange={handleChange}
                 />
-                <span className="form__error email-error" />
+                <span className={`form__error email-error  ${errors?.email ? "form__error_visible-user" : ""}`}>
+                    {errors?.email}</span>
             </div>
             <div className="form__label">
                 <input
@@ -63,10 +65,11 @@ function Register({ onSuccessRegister }) {
                     minLength={10}
                     maxLength={10}
                     required
-                    value={formValue.password}
+                    value={values.password ?? ''}
                     onChange={handleChange}
                 />
-                <span className="form__error password-error" />
+                <span className={`form__error password-error  ${errors?.password ? "form__error_visible-user" : ""}`}>
+                    {errors?.password}</span>
             </div>
         </UserForm>
     )

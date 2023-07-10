@@ -10,6 +10,7 @@ import EditProfilePopup from './EditProfilePopup.js';
 import EditAvatarPopup from './EditAvatarPopup.js';
 import AddPlacePopup from './AddPlacePopup.js';
 import * as auth from '../auth.js';
+import { useFormAndValidation } from '../hooks/useFormAndValidation.js';
 
 // Импортируем компоненты приложения, которые используем в Роутах
 import Register from './Register.js';
@@ -31,11 +32,16 @@ function App() {
 
   const [cards, setCards] = useState([]);
 
+
   // Стейты для модальных окон регистрации (информационная подсказка)
   // Для успешной регистрации
   const [isSuccessRegistrPopupOpen, setIsSuccessRegistrPopupOpen] = useState(false);
-  // Для неуспешной регистрации
-  const [isFailLoginPopupOpen, setIsFailLoginPopupOpen] = useState(false);
+  
+  // Для неуспешного входа и регистрации
+  const [isFailPopupOpen, setIsFailPopupOpen] = useState(false);
+
+   // Стейт с текстом ошибки
+   const [popupErrorMessage, setPopupErrorMessage] = useState('Что-то пошло не так! Попробуйте ещё раз.');
 
   // Стейт для контекста текущего пользователя
   const [currentUser, setCurrentUser] = useState({});
@@ -68,7 +74,11 @@ function App() {
           setLoggedIn(true);
           navigate("/users/me", { replace: true })
         }
-      });
+      })
+
+        .catch((err) => {
+          console.log(err); // выведем ошибку в консоль
+        });
     }
   }
 
@@ -112,9 +122,16 @@ function App() {
     setIsSuccessRegistrPopupOpen(() => true);
   }
 
+  // Обратчик для открытия попапа "неудачной регистрации"
+  function handleFailRegister(err) {
+    setPopupErrorMessage(() => `Ошибка: ${err.body.error}`);
+    setIsFailPopupOpen(() => true);
+  }
+
   // Обратчик для открытия попапа "неудачного входа"
-  function handleFailLogin() {
-    setIsFailLoginPopupOpen(() => true);
+  function handleFailLogin(err) {
+    setPopupErrorMessage(() => `Ошибка: ${err.body.message}`);
+    setIsFailPopupOpen(() => true);
   }
 
   // Для попапа редактирования профиля
@@ -143,7 +160,8 @@ function App() {
     setIsAddPlacePopupOpen(false);
     setIsEditAvatarPopupOpen(false);
     setSelectedCard(null);
-    setIsFailLoginPopupOpen(false);
+    setIsFailPopupOpen(false);
+    setPopupErrorMessage(() => "Что-то пошло не так! Попробуйте ещё раз.");
   }
 
   // Закрытие попапа SuccessRegistr
@@ -237,7 +255,7 @@ function App() {
 
           <InfoTooltip isOpen={isSuccessRegistrPopupOpen} popupName="success" classIcon="success-icon" classText="title-success" title="Вы успешно зарегистрировались!"
             onClose={closeSuccessRegistr} />
-          <InfoTooltip isOpen={isFailLoginPopupOpen} popupName="fail" classIcon="fail-icon" classText="title-fail" title="Что-то пошло не так! Попробуйте ещё раз."
+          <InfoTooltip isOpen={isFailPopupOpen} popupName="fail" classIcon="fail-icon" classText="title-fail" title={popupErrorMessage}
             onClose={closeAllPopups} />
 
           <Header userInfo={userInfo} />
@@ -246,7 +264,7 @@ function App() {
 
             <Route path="/" element={loggedIn ? <Navigate to="/users/me" replace /> : <Navigate to="/signin" replace />} />
 
-            <Route path="/signup" element={<Register onSuccessRegister={handleSuccessRegistr} />} />
+            <Route path="/signup" element={<Register onSuccessRegister={handleSuccessRegistr} onFailRegister={handleFailRegister}/>} />
             <Route path="/signin" element={<Login handleLogin={handleLogin} handleFailLogin={handleFailLogin} />} />
 
             {/* Защищённый маршрут */}
