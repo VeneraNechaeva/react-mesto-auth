@@ -10,6 +10,7 @@ import EditProfilePopup from './EditProfilePopup.js';
 import EditAvatarPopup from './EditAvatarPopup.js';
 import AddPlacePopup from './AddPlacePopup.js';
 import * as auth from '../auth.js';
+import { useFormAndValidation } from '../hooks/useFormAndValidation.js';
 
 // Импортируем компоненты приложения, которые используем в Роутах
 import Register from './Register.js';
@@ -30,6 +31,7 @@ function App() {
   const [selectedCard, setSelectedCard] = useState(null);
 
   const [cards, setCards] = useState([]);
+
 
   // Стейты для модальных окон регистрации (информационная подсказка)
   // Для успешной регистрации

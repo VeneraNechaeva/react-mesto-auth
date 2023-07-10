@@ -33,9 +33,9 @@ function Login({ handleLogin, handleFailLogin }) {
             return;
         }
         auth.login(formValue.email, formValue.password)
-            .then((jwt) => {
+            .then((data) => {
                 try {
-                    localStorage.setItem('jwt', jwt);
+                    localStorage.setItem('jwt', data.token);
                     setFormValue({ username: '', password: '' });
                     handleLogin(e);
                     navigate('/users/me', { replace: true });
