@@ -64,7 +64,8 @@
 @import url(./blocks/form/__field/form__field.css);
 @import url(./blocks/form/__label/form__label.css);
 @import url(./blocks/form/__button/form__button.css);
+@import url(./blocks/form/__button/_disabled/form__button_disabled.css);
 @import url(./blocks/form/__error/form__error.css);
-@import url(./blocks/form/__error/_visible/form__error_visible.css);
+@import url(./blocks/form/__error/_visible-user/form__error_visible-user.css);
 @import url(./blocks/form/__text/form__text.css);
 @import url(./blocks/form/__link-text/form__link-text.css);

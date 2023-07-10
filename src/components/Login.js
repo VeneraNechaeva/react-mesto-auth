@@ -1,46 +1,39 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import * as auth from '../auth.js';
 import UserForm from './UserForm.js';
+import { useFormAndValidation } from '../hooks/useFormAndValidation.js';
 
 // Компонент для входа
 function Login({ handleLogin, handleFailLogin }) {
 
-    // Стейт переменные, в которых содержатся значения инпутов
-    const [formValue, setFormValue] = useState({
-        email: '',
-        password: '',
-    });
+    // Запуск валидации
+    const { values, handleChange, errors, isValid, resetForm } = useFormAndValidation();
 
     // Хук возвращает функцию, которая позволяет рограммно перемещаться
     const navigate = useNavigate();
 
-    // Обработчик изменения инпута, обновляет стейт 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-
-        setFormValue({
-            ...formValue,
-            [name]: value
-        });
-    }
+    // Очистка полей от ошибок
+    useEffect(() => {
+        resetForm();
+    }, []);
 
     // Обработчик авторизации
     const onLogin = (e) => {
         e.preventDefault();
 
-        if (!formValue.email || !formValue.password) {
+        if (!values.email || !values.password) {
             return;
         }
-        auth.login(formValue.email, formValue.password)
+        auth.login(values.email, values.password)
             .then((data) => {
                 try {
                     localStorage.setItem('jwt', data.token);
-                    setFormValue({ username: '', password: '' });
+                    resetForm();
                     handleLogin(e);
                     navigate('/users/me', { replace: true });
                 } catch (err) {
-                    handleFailLogin({body: {message: err}})
+                    handleFailLogin({ body: { message: err } })
                 }
             })
             .catch(err => {
@@ -54,7 +47,7 @@ function Login({ handleLogin, handleFailLogin }) {
 
     return (
         <UserForm name="login" title="Вход" buttonText="Войти" text="" textLink=""
-            onSubmit={onLogin}>
+            onSubmit={onLogin} isSubmitEnable={isValid}>
             <div className="form__label">
                 <input
                     id="email"
@@ -65,10 +58,11 @@ function Login({ handleLogin, handleFailLogin }) {
                     minLength={2}
                     maxLength={40}
                     required
-                    value={formValue.email}
+                    value={values.email ?? ''}
                     onChange={handleChange}
                 />
-                <span className="form__error email-error" />
+                <span className={`form__error email-error  ${errors?.email ? "form__error_visible-user" : ""}`}>
+                    {errors?.email}</span>
             </div>
             <div className="form__label">
                 <input
@@ -80,10 +74,11 @@ function Login({ handleLogin, handleFailLogin }) {
                     minLength={10}
                     maxLength={10}
                     required
-                    value={formValue.password}
+                    value={values.password ?? ''}
                     onChange={handleChange}
                 />
-                <span className="form__error password-error" />
+                <span className={`form__error password-error  ${errors?.password ? "form__error_visible-user" : ""}`}>
+                    {errors?.password}</span>
             </div>
         </UserForm>
     )
